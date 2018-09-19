@@ -12,12 +12,29 @@
                 @foreach($post->comments as $comment)
                     <li class="list-group-item">
                         <strong>
-                            {{ $comment->created_at->diffForHumans() }}: 
+                            {{ $comment->created_at->diffForHumans() }} by {{ $comment->user->name }}:
                         </strong>
                         {{ $comment->body }}
                     </li>
                 @endforeach
             </ul>
+        </div>
+
+        <hr>
+
+        <div class="card">
+            <div class="card-body">
+                @include('layouts.errors')
+                <form method="post" action="/posts/{{ $post->id }}/comments">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <textarea name="body" placeholder="Your comment here" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
