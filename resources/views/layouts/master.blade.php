@@ -20,6 +20,13 @@
 <body>
 
 <div class="container">
+
+    @if($flash = session('message'))
+        <div class="alert alert-success" role="alert">
+            {{ $flash }}
+        </div>
+    @endif
+
     @include('layouts.header')
 
     <main role="main" class="container">

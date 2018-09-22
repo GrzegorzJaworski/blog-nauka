@@ -22,10 +22,10 @@ class SessionsController extends Controller
            'email' => 'required',
             'password' => 'required'
         ]);
-//dd(request(['email', 'password']));
+
         if(! auth()->attempt(request(['email', 'password']))) {
             return back()->withErrors([
-                'message' => 'Sraka'
+                'message' => 'Error'
             ]);
         }
 

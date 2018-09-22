@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index','show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index()
+    public function index(Tag $tag = null)
     {
-        $posts = Post::latest()->get();
+
+        $posts = Post::latest()
+            ->filter(request(['month', 'year']))
+            ->get()
+        ;
 
         return view('posts.index', compact('posts'));
     }
@@ -23,6 +28,7 @@ class PostsController extends Controller
     {
         return view('posts.create');
     }
+
     public function show(Post $post)
     {
 //        $post = Post::find($id);
@@ -32,7 +38,7 @@ class PostsController extends Controller
 
     public function store()
     {
-        $this->validate(request(),[
+        $this->validate(request(), [
             'title' => 'required',
             'body' => 'required',
         ]);
@@ -40,6 +46,8 @@ class PostsController extends Controller
         auth()->user()->publish(
             new Post(request(['title', 'body']))
         );
+
+        session()->flash('message', 'Your post has now published');
 
         return redirect('/');
     }
